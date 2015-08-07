@@ -4,10 +4,6 @@ body {
 div.container {
     box-sizing: content-box;
 }
-a.navbar-brand{
-    width:200px;
-    padding: 0;
-}
 .navbar-brand > img {
     display: inline;
 }
