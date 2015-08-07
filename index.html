@@ -238,9 +238,9 @@ function updatePropSymbols(timestamp) {
                    "<b>" + String(props[timestamp][0]) +
                    "</b> consultations in week " + timestamp + " 2015<br>" +
                    "<b>Reporting Place</b>: " + String(props[timestamp][1]) +
-                   "<br><b>Partner</b>: " + String(props[timestamp][2]) +
+                   "<br><b>Partner</b>: " + String(props[timestamp][2]).toUpperCase() +
                    "<br><b>Type</b>: " + String(props[timestamp][3]) +
-                   "<br><b>Type Facility</b>: " + String(props[timestamp][4]);
+                   "<br><b>Type Facility</b>: " + String(props[timestamp][4]).toUpperCase();
     }
     else{
         popupContent = "<b>" + props.name + " </b><br>" +
