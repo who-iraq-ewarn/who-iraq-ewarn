@@ -1,9 +1,1004 @@
 <!DOCTYPE html>
-<html>
-<head>
-	<title></title>
-</head>
-<body>
-<h3>Test</h3>
-</body>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="WHO, OMS">
+    <title>WHO - IRAQ</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="code/src/bootstrap-3.3.4-dist/css/bootstrap.min.css" rel="stylesheet"> 
+    <link rel="stylesheet" href="code/src/leaflet/leaflet.css"/>
+    <link rel="stylesheet" href="code/src/leaflet/leaflet.label.css" />
+    <link rel="stylesheet" href="code/src/nvd3-master/build/nv.d3.min.css" />
+    <link rel="stylesheet" href="code/css/style.css"/>
+
+    <script src="code/src/jquery-2.1.1.min.js"></script>
+    <!-- <script src="code/src/html5slider.js"></script>-->
+    <script src="code/src/leaflet/leaflet.js"></script>
+    <script src="code/src/leaflet/leaflet.label.js"></script>
+    <script src="code/src/nvd3-master/d3.min.js"></script>
+    <script src="code/src/nvd3-master/build/nv.d3.min.js"></script>
+    <script src='code/data/layers/countries.geojson'></script>
+    <script src='code/data/layers/health_districts.geojson'></script>
+    <script src='code/data/layers/health_provinces.geojson'></script>
+    <script src='code/data/all_per_week.geojson'></script>
+    <script src='code/data/Acumal_per_week.geojson'></script>
+    <script src='code/data/Ad_per_week.geojson'></script>
+    <script src='code/data/Afp_per_week.geojson'></script>
+    <script src='code/data/Ajs_per_week.geojson'></script>
+    <script src='code/data/Awd_per_week.geojson'></script>
+    <script src='code/data/Bd_per_week.geojson'></script>
+    <script src='code/data/Lesh_per_week.geojson'></script>
+    <script src='code/data/Lrti_per_week.geojson'></script>
+    <script src='code/data/Mg_per_week.geojson'></script>
+    <script src='code/data/Oth_per_week.geojson'></script>
+    <script src='code/data/Skin_per_week.geojson'></script>
+    <script src='code/data/Susp_Dip_per_week.geojson'></script> 
+    <script src='code/data/Susp_Hf_per_week.geojson'></script>
+    <script src='code/data/Susp_Ms_per_week.geojson'></script> 
+    <script src='code/data/Susp_Nnt_per_week.geojson'></script>
+    <script src='code/data/Susp_Pert_per_week.geojson'></script> 
+    <script src='code/data/Susp_Rabies_per_week.geojson'></script>
+    <script src='code/data/Unexp_Fever_per_week.geojson'></script>
+    <script src='code/data/Urti_per_week.geojson'></script>      
+  </head>
+  <body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="index.html">WHO - IRAQ - EWARN</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <!-- <li class="active"><a href="#">Home</a></li> -->
+            <li><a href="index.html"><span class="glyphicon glyphicon glyphicon-globe" aria-hidden="true"></span>  Maps</a></li>
+            <li><a href="charts.html"><span class="glyphicon glyphicon glyphicon-signal" aria-hidden="true"></span>  Charts</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+    <div class="epi_content">
+    <h2>Consultations per Reporting Sites by Week</h2>
+     <div id="map"></div>
+      
+    <script>
+ $(document).ready(function() {
+         var scaleFactor = 2;
+         var map = L.map('map', { 
+                center: [33.3, 43.5], 
+                zoom: 6.1,    
+                minZoom: 6  
+            });
+    var OpenStreetMap_HOT = L.tileLayer( 'http://{s}.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="http://osm.org/copyright" title="OpenStreetMap" target="_blank">OpenStreetMap</a> contributors | Tiles Courtesy of <a href="http://www.mapquest.com/" title="MapQuest" target="_blank">MapQuest</a> <img src="http://developer.mapquest.com/content/osm/mq_logo.png" width="16" height="16">',
+    subdomains: ['otile1','otile2','otile3','otile4']
+})
+        var hdists = L.geoJson(health_districts, {
+            style: function (feature) {
+                return {fillColor: "#ffffbf",
+                        color: "#d8b365",
+                        weight: 0.8,
+                        opacity: 0.8,
+                        fillOpacity: .7};
+            },
+            onEachFeature: function (feature, layer) {
+                layer.bindPopup(feature.properties.name, {autoPan: false});
+            }
+        });
+        var countries = L.geoJson(countr, {
+            style: function (feature) {
+                return {fillColor: "white",
+                        color: "black",
+                        weight: 1,
+                        opacity: 0.8,
+                        fillOpacity: 0.8};
+            }
+        });
+        var hprovs = L.geoJson(health_provinces, {
+            style: function (feature) {
+                return {color: "#8A4117",
+                        weight: 1,
+                        opacity: 0.8};
+            }
+        });
+
+        var baseLayers = L.layerGroup([countries, hdists, hprovs]).addTo(map);
+        
+        var labelIran= new L.Label();
+        labelIran.setContent("<em>IRAN</em>");
+        labelIran.setLatLng([33.8, 48.5]);
+        map.showLabel(labelIran);
+        
+        var labelSyriq = new L.Label();
+        labelSyriq.setContent("<em>SYRIA</em>");
+        labelSyriq.setLatLng([35, 38]);
+        map.showLabel(labelSyriq);
+
+        var labelJordan = new L.Label();
+        labelJordan.setContent('<em>JORDAN</em>');
+        labelJordan.setLatLng([31, 35.5]);
+        map.showLabel(labelJordan);
+
+        var labelKSA = new L.Label();
+        labelKSA.setContent('<em>SAUDI</br>ARABIA</em>');
+        labelKSA.setLatLng([30.5, 39]);
+        map.showLabel(labelKSA);
+
+        var labelTurkey = new L.Label();
+        labelTurkey.setContent('<em>TURKEY</em>');
+        labelTurkey.setLatLng([37.1, 38]);
+        map.showLabel(labelTurkey);
+
+        var labelKuwait = new L.Label();
+        labelKuwait.setContent('<em>KUWAIT</em>');
+        labelKuwait.setLatLng([29.4, 46.9]);
+        map.showLabel(labelKuwait);
+
+// Function to display the cumulative data
+var last_cumul;
+function show_cumulative(geojson_file) {
+    $.getJSON(geojson_file, function(data) {   
+        var geojson = L.geoJson(data, {
+            onEachFeature: function (feature, layer) {
+                popupContent = "<b>" + feature.properties.name + " </b><br>" +
+                               "<b>" + String(feature.properties.total) +
+                               "</b> consultations";
+                // Calculations for radius in function of field 'total'
+                radius =  (Math.log(feature.properties.total) + 1) * scaleFactor
+                layer.setRadius(radius);
+                layer.bindPopup(popupContent, { offset: new L.Point(0,-radius) }); 
+                layer.on({
+                    mouseover: function(e) {
+                        this.openPopup();
+                        this.setStyle({color: 'yellow', weight: 2});
+                    },
+                    mouseout: function(e) {
+                        this.closePopup();
+                        this.setStyle({color: '#537898', weight: 1});     
+                    }
+                });
+            },
+            pointToLayer: function(feature, latlng) {   
+                // Calculations for radius. Same as bellow
+                return L.circleMarker(latlng, {     
+                    radius: (Math.log(feature.properties.total) + 1) * scaleFactor,
+                    fillColor: "red", 
+                    color: '#537898',   
+                    weight: 1,  
+                    fillOpacity: 0.6  
+                });
+            }
+        }).addTo(map);
+        last_cumul = geojson;
+        });
+}
+
+function processData(data) {  
+    var timestamps = [],
+        min = Infinity, 
+        max = -Infinity;
+
+    for (var feature in data.features) {    
+        var properties = data.features[feature].properties; 
+
+        for (var attribute in properties) { 
+            if ( attribute != 'id' &&   
+                 attribute != 'name') 
+            {
+                if ( $.inArray(attribute,timestamps) ===  -1) { 
+                    timestamps.push(attribute);
+                }
+                if (properties[attribute][0] < min) {  
+                    min = properties[attribute][0]; 
+                }
+                if (properties[attribute][0] > max) { 
+                    max = properties[attribute][0];        
+                }
+            }
+        }
+    }
+    return {    
+        timestamps : timestamps,
+        min : min,
+        max : max
+    }
+}  // end processData()
+
+function createPropSymbols(timestamps, data) {
+    cases = L.geoJson(data, {      
+        pointToLayer: function(feature, latlng) {   
+            return L.circleMarker(latlng, {         
+                fillColor: 'red', 
+                color: '#537898',   
+                weight: 1,  
+                fillOpacity: 0.6  
+            });
+        }
+    }).addTo(map);   
+    updatePropSymbols(timestamps[timestamps.length-1]);   
+}
+
+function updatePropSymbols(timestamp) {
+    cases.eachLayer(function(layer) {  
+        
+    var props = layer.feature.properties;
+    radius = calcPropRadius(props[timestamp][0]);
+    
+    if (timestamp <= 53) {
+        popupContent = "<b>" + props.name + " </b><br>" +
+                   "<b>" + String(props[timestamp][0]) +
+                   "</b> consultations in week " + timestamp + " 2015<br>" +
+                   "<b>Reporting Place</b>: " + String(props[timestamp][1]) +
+                   "<br><b>Partner</b>: " + String(props[timestamp][2]) +
+                   "<br><b>Type</b>: " + String(props[timestamp][3]) +
+                   "<br><b>Type Facility</b>: " + String(props[timestamp][4]);
+    }
+    else{
+        popupContent = "<b>" + props.name + " </b><br>" +
+                   "<b>" + String(props[timestamp]) +
+                   "</b> cas dans la semaine " + String(timestamp - 53) + " de 2015";
+    };
+    layer.setRadius(radius);
+    layer.bindPopup(popupContent, { offset: new L.Point(0,-radius) }); 
+    layer.on({
+        mouseover: function(e) {
+            this.openPopup();
+            this.setStyle({color: 'yellow', weight: 2});
+        },
+        mouseout: function(e) {
+            this.closePopup();
+            this.setStyle({color: '#537898', weight: 1});     
+        }
+    });  
+})
+} 
+
+function calcPropRadius(attributeValue) {         
+    return (Math.log(attributeValue) + 1) * scaleFactor;  
+}
+
+function createSliderUI(timestamps) {
+    var sliderControl = L.control({ position: 'bottomleft'} );
+
+    sliderControl.onAdd = function(map) {
+
+        var slider = L.DomUtil.create("input", "range-slider");
+
+        L.DomEvent.addListener(slider, 'mousedown', function(e) { 
+
+            L.DomEvent.stopPropagation(e); 
+        });
+        $(slider)
+        .attr({'type':'range', 'max': timestamps[timestamps.length-1], 'min':timestamps[0], 'step': 1,'value': timestamps[timestamps.length-1]}).on('input change', function() {
+            
+            updatePropSymbols($(this).val().toString(), 'week');
+            $('output.temporal-legend').removeAttr('id');
+            $(".temporal-legend").text('Week ' + this.value);
+            if (this.value <= 53) {
+                $(".temporal-legend").text('Week ' + this.value + ' 2015');
+                semaine_map = this.value + '_2014';
+            }   
+            else{
+                $(".temporal-legend").text('Semaine ' + String(this.value - 53) + ' de 2015');
+                semaine_map = String(this.value - 53) + '_2015';
+            };
+        });
+        return slider;
+    }
+    sliderControl.addTo(map);
+    createTemporalLegend(timestamps[timestamps.length-1]);
+}
+
+function createTemporalLegend(startTimestamp, step) {
+    var temporalLegend = L.control({ position: 'bottomleft' });  
+    temporalLegend.onAdd = function(map) {  
+        var output = L.DomUtil.create("output", "temporal-legend");
+        return output;  
+    }
+    temporalLegend.addTo(map);  
+    if (startTimestamp <= 53) {
+        $(".temporal-legend").text('Week ' + startTimestamp + ' 2015');
+        semaine_map = startTimestamp + '_2014';
+    }
+    else{
+    $(".temporal-legend").text('Semaine ' + String(startTimestamp - 53) + ' de 2015'); 
+    semaine_map = String(startTimestamp - 53) + '_2015';
+    };
+}
+
+var dataInfo = processData(cons_all);   
+createPropSymbols(dataInfo.timestamps, cons_all); 
+createSliderUI(dataInfo.timestamps); 
+    
+var dropdmenu = L.control({position: 'topright'});
+dropdmenu.onAdd = function (map) {
+    var div = L.DomUtil.create('div', 'info dropdmenu');
+    div.innerHTML = '<select class="form-control choix_temp"><option value="1">All</option><option value="2">Acumal</option><option value="3">AD</option><option value="4">AFP</option><option value="5">AJS</option><option value="6">AWD</option><option value="7">BD</option><option value="8">Lesh</option><option value="9">LRTI</option><option value="10">MG</option><option value="11">OTH</option><option value="12">Skin</option><option value="13">Susp. Dip</option><option value="14">Susp. HF</option><option value="15">Susp. MS</option><option value="16">Susp. NNT</option><option value="17">Susp. Pert</option><option value="18">Susp. Rabies</option><option value="19">Unexp. Fever</option><option value="20">URTI</option></select>';
+    div.firstChild.onmousedown = div.firstChild.ondblclick = L.DomEvent.stopPropagation;
+    return div;
+};
+
+dropdmenu.addTo(map);
+
+function updateMenu(geojson_var) {
+    $("output.temporal-legend").remove();
+    $("input.range-slider").remove();
+    map.removeLayer(cases);
+
+    var dataWeek = processData(geojson_var);   
+    createPropSymbols(dataWeek.timestamps, geojson_var);     
+    createSliderUI(dataWeek.timestamps);
+}
+
+$("select").change(
+ function () {
+  var val=this.value;
+    if ($(this).val() == "1") {
+        if ($("button.bswitchCW").text() ==="See cumulative data") {
+            updateMenu(cons_all);
+        }
+        else {
+            $("output.temporal-legend").remove();
+            $("input.range-slider").remove();   
+            try {
+                map.removeLayer(cases);
+                map.removeLayer(last_cumul);
+            }
+            catch(e) {}
+            show_cumulative("code/data/all_cumul.geojson");
+        }
+    }
+    else if ($(this).val() == "2") {
+        if ($("button.bswitchCW").text() ==="See cumulative data") {
+            updateMenu(cons_Acumal);
+        }
+        else {
+            $("output.temporal-legend").remove();
+            $("input.range-slider").remove();
+            try {
+                map.removeLayer(cases);
+                map.removeLayer(last_cumul);
+            }
+            catch(e) {}
+            show_cumulative("code/data/Acumal_cumul.geojson");
+        }
+    }
+    else if ($(this).val() == "3") {
+        if ($("button.bswitchCW").text() ==="See cumulative data") {
+            updateMenu(cons_Ad);
+        }
+        else {
+            $("output.temporal-legend").remove();
+            $("input.range-slider").remove();
+            try {
+                map.removeLayer(cases);
+                map.removeLayer(last_cumul);
+            }
+            catch(e) {}
+            show_cumulative("code/data/Ad_cumul.geojson");
+        }
+    }
+    else if ($(this).val() == "4") {
+        if ($("button.bswitchCW").text() ==="See cumulative data") {
+            updateMenu(cons_Afp);
+        }
+        else {
+            $("output.temporal-legend").remove();
+            $("input.range-slider").remove();
+            try {
+                map.removeLayer(cases);
+                map.removeLayer(last_cumul);
+            }
+            catch(e) {}
+            show_cumulative("code/data/Afp_cumul.geojson");
+        }
+    }
+    else if ($(this).val() == "5") {
+        if ($("button.bswitchCW").text() ==="See cumulative data") {
+            updateMenu(cons_Ajs);
+        }
+        else {
+            $("output.temporal-legend").remove();
+            $("input.range-slider").remove();
+            try {
+                map.removeLayer(cases);
+                map.removeLayer(last_cumul);
+            }
+            catch(e) {}
+            show_cumulative("code/data/Ajs_cumul.geojson");
+        }     
+    }
+    else if ($(this).val() == "6") {
+        if ($("button.bswitchCW").text() ==="See cumulative data") {
+            updateMenu(cons_Awd);
+        }
+        else {
+            $("output.temporal-legend").remove();
+            $("input.range-slider").remove();
+            try {
+                map.removeLayer(cases);
+                map.removeLayer(last_cumul);
+            }
+            catch(e) {}
+            show_cumulative("code/data/Awd_cumul.geojson");
+        }     
+    }
+    else if ($(this).val() == "7") {
+        if ($("button.bswitchCW").text() ==="See cumulative data") {
+            updateMenu(cons_Bd);
+        }
+        else {
+            $("output.temporal-legend").remove();
+            $("input.range-slider").remove();
+            try {
+                map.removeLayer(cases);
+                map.removeLayer(last_cumul);
+            }
+            catch(e) {}
+            show_cumulative("code/data/Bd_cumul.geojson");
+        }     
+    }
+    else if ($(this).val() == "8") {
+        if ($("button.bswitchCW").text() ==="See cumulative data") {
+            updateMenu(cons_Lesh);
+        }
+        else {
+            $("output.temporal-legend").remove();
+            $("input.range-slider").remove();
+            try {
+                map.removeLayer(cases);
+                map.removeLayer(last_cumul);
+            }
+            catch(e) {}
+            show_cumulative("code/data/Lesh_cumul.geojson");
+        }     
+    }
+    else if ($(this).val() == "9") {
+        if ($("button.bswitchCW").text() ==="See cumulative data") {
+            updateMenu(cons_Lrti);
+        }
+        else {
+            $("output.temporal-legend").remove();
+            $("input.range-slider").remove();
+            try {
+                map.removeLayer(cases);
+                map.removeLayer(last_cumul);
+            }
+            catch(e) {}
+            show_cumulative("code/data/Lrti_cumul.geojson");
+        }     
+    }
+    else if ($(this).val() == "10") {
+        if ($("button.bswitchCW").text() ==="See cumulative data") {
+            updateMenu(cons_Mg);
+        }
+        else {
+            $("output.temporal-legend").remove();
+            $("input.range-slider").remove();
+            try {
+                map.removeLayer(cases);
+                map.removeLayer(last_cumul);
+            }
+            catch(e) {}
+            show_cumulative("code/data/Mg_cumul.geojson");
+        }     
+    }
+    else if ($(this).val() == "11") {
+        if ($("button.bswitchCW").text() ==="See cumulative data") {
+            updateMenu(cons_Oth);
+        }
+        else {
+            $("output.temporal-legend").remove();
+            $("input.range-slider").remove();
+            try {
+                map.removeLayer(cases);
+                map.removeLayer(last_cumul);
+            }
+            catch(e) {}
+            show_cumulative("code/data/Oth_cumul.geojson");
+        }     
+    }
+    else if ($(this).val() == "12") {
+        if ($("button.bswitchCW").text() ==="See cumulative data") {
+            updateMenu(cons_Skin);
+        }
+        else {
+            $("output.temporal-legend").remove();
+            $("input.range-slider").remove();
+            try {
+                map.removeLayer(cases);
+                map.removeLayer(last_cumul);
+            }
+            catch(e) {}
+            show_cumulative("code/data/Skin_cumul.geojson");
+        }     
+    }
+    else if ($(this).val() == "13") {
+        if ($("button.bswitchCW").text() ==="See cumulative data") {
+            updateMenu(cons_Susp_Dip);
+        }
+        else {
+            $("output.temporal-legend").remove();
+            $("input.range-slider").remove();
+            try {
+                map.removeLayer(cases);
+                map.removeLayer(last_cumul);
+            }
+            catch(e) {}
+            show_cumulative("code/data/Susp_Dip_cumul.geojson");
+        }     
+    }
+    else if ($(this).val() == "14") {
+        if ($("button.bswitchCW").text() ==="See cumulative data") {
+            updateMenu(cons_Susp_Hf);
+        }
+        else {
+            $("output.temporal-legend").remove();
+            $("input.range-slider").remove();
+            try {
+                map.removeLayer(cases);
+                map.removeLayer(last_cumul);
+            }
+            catch(e) {}
+            show_cumulative("code/data/Susp_Hf_cumul.geojson");
+        }     
+    }
+    else if ($(this).val() == "15") {
+        if ($("button.bswitchCW").text() ==="See cumulative data") {
+            updateMenu(cons_Susp_Ms);
+        }
+        else {
+            $("output.temporal-legend").remove();
+            $("input.range-slider").remove();
+            try {
+                map.removeLayer(cases);
+                map.removeLayer(last_cumul);
+            }
+            catch(e) {}
+            show_cumulative("code/data/Susp_Ms_cumul.geojson");
+        }     
+    }
+    else if ($(this).val() == "16") {
+        if ($("button.bswitchCW").text() ==="See cumulative data") {
+            updateMenu(cons_Susp_Nnt);
+        }
+        else {
+            $("output.temporal-legend").remove();
+            $("input.range-slider").remove();
+            try {
+                map.removeLayer(cases);
+                map.removeLayer(last_cumul);
+            }
+            catch(e) {}
+            show_cumulative("code/data/Susp_Nnt_cumul.geojson");
+        }     
+    }
+    else if ($(this).val() == "17") {
+        if ($("button.bswitchCW").text() ==="See cumulative data") {
+            updateMenu(cons_Susp_Pert);
+        }
+        else {
+            $("output.temporal-legend").remove();
+            $("input.range-slider").remove();
+            try {
+                map.removeLayer(cases);
+                map.removeLayer(last_cumul);
+            }
+            catch(e) {}
+            show_cumulative("code/data/Susp_Pert_cumul.geojson");
+        }     
+    }
+    else if ($(this).val() == "18") {
+        if ($("button.bswitchCW").text() ==="See cumulative data") {
+            updateMenu(cons_Susp_Rabies);
+        }
+        else {
+            $("output.temporal-legend").remove();
+            $("input.range-slider").remove();
+            try {
+                map.removeLayer(cases);
+                map.removeLayer(last_cumul);
+            }
+            catch(e) {}
+            show_cumulative("code/data/Susp_Rabies_cumul.geojson");
+        }     
+    }
+    else if ($(this).val() == "19") {
+        if ($("button.bswitchCW").text() ==="See cumulative data") {
+            updateMenu(cons_Unexp_Fever);
+        }
+        else {
+            $("output.temporal-legend").remove();
+            $("input.range-slider").remove();
+            try {
+                map.removeLayer(cases);
+                map.removeLayer(last_cumul);
+            }
+            catch(e) {}
+            show_cumulative("code/data/Unexp_Fever_cumul.geojson");
+        }     
+    }
+    // value = "20"
+    else {
+        if ($("button.bswitchCW").text() ==="See cumulative data") {
+            updateMenu(cons_Urti);
+        }
+        else {
+            $("output.temporal-legend").remove();
+            $("input.range-slider").remove();
+            try {
+                map.removeLayer(cases);
+                map.removeLayer(last_cumul);
+            }
+            catch(e) {}
+            show_cumulative("code/data/Urti_cumul.geojson");
+        }
+    }; 
+})
+// ----------------- End drop down -----------------
+
+var switchOsm = L.control( { position: 'topright' } );
+switchOsm.onAdd = function(map) {
+var buttonSwitch = L.DomUtil.create("button", "bswitch btn btn-default");
+//$(buttonSwitch).text("OpenStreetMap");
+$(buttonSwitch).append( '<span class=" glyphicon glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span>');
+  L.DomEvent.addListener(buttonSwitch, 'click', function(e) { 
+
+    if (map.hasLayer(OpenStreetMap_HOT) == true) {
+        map.removeLayer(OpenStreetMap_HOT);
+        map.addLayer(baseLayers);
+        
+        hprovs.bringToBack();
+        hdists.bringToBack();
+        countries.bringToBack();            
+        $("em").show();
+    }
+    else{
+        map.addLayer(OpenStreetMap_HOT);
+        $("em").hide();
+        map.removeLayer(baseLayers);
+    };
+  });
+  return buttonSwitch;
+};
+switchOsm.addTo(map); 
+
+var fullZoom = L.control( { position: 'topright' } );
+fullZoom.onAdd = function(map) {
+var buttonZoom = L.DomUtil.create("button", "bzoom btn btn-default");
+$(buttonZoom).append( '<span class="glyphicon glyphicon glyphicon-globe" aria-hidden="true"></span>');
+
+  L.DomEvent.addListener(buttonZoom, 'click', function(e) { 
+      map.setView([33.3, 43.5], 6.1);
+  });
+  return buttonZoom;
+};
+fullZoom.addTo(map); 
+
+var switchCW = L.control( { position: 'topright' } );
+switchCW.onAdd = function(map) {
+var buttonswitchCW = L.DomUtil.create("button", "bswitchCW btn btn-default");
+$(buttonswitchCW).text("See cumulative data");
+L.DomEvent.addListener(buttonswitchCW, 'click', function(e) { 
+var $this = $(this);
+// To display the cumulative data
+if ($this.text() == "See cumulative data") {
+     $this.text('Back to weekly data');        
+
+     if ($("select").val() == "1") {
+        $("output.temporal-legend").remove();
+        $("input.range-slider").remove();
+        try {
+            map.removeLayer(cases);
+            map.removeLayer(last_cumul);
+        }
+        catch(e) {}
+        show_cumulative("code/data/all_cumul.geojson");
+    }
+    else if ($("select").val() == "2") {
+        $("output.temporal-legend").remove();
+        $("input.range-slider").remove();
+        try {
+            map.removeLayer(cases);
+            map.removeLayer(last_cumul);
+        }
+        catch(e) {}
+        show_cumulative("code/data/Acumal_cumul.geojson");
+
+    }
+    else if ($("select").val() == "3") {
+        $("output.temporal-legend").remove();
+        $("input.range-slider").remove();
+        try {
+            map.removeLayer(cases);
+            map.removeLayer(last_cumul);
+        }
+        catch(e) {}
+        show_cumulative("code/data/Ad_cumul.geojson");
+    }
+    else if ($("select").val() == "4") {
+        $("output.temporal-legend").remove();
+        $("input.range-slider").remove();
+        try {
+            map.removeLayer(cases);
+            map.removeLayer(last_cumul);
+        }
+        catch(e) {}
+        show_cumulative("code/data/Afp_cumul.geojson");
+    }
+    else if ($("select").val() == "5") {
+        $("output.temporal-legend").remove();
+        $("input.range-slider").remove();
+        try {
+            map.removeLayer(cases);
+            map.removeLayer(last_cumul);
+        }
+        catch(e) {}
+        show_cumulative("code/data/Ajs_cumul.geojson");
+    }
+    else if ($("select").val() == "6") {
+        $("output.temporal-legend").remove();
+        $("input.range-slider").remove();
+        try {
+            map.removeLayer(cases);
+            map.removeLayer(last_cumul);
+        }
+        catch(e) {}
+        show_cumulative("code/data/Awd_cumul.geojson");
+    }
+    else if ($("select").val() == "7") {
+        $("output.temporal-legend").remove();
+        $("input.range-slider").remove();
+        try {
+            map.removeLayer(cases);
+            map.removeLayer(last_cumul);
+        }
+        catch(e) {}
+        show_cumulative("code/data/Bd_cumul.geojson");
+    }
+    else if ($("select").val() == "8") {
+        $("output.temporal-legend").remove();
+        $("input.range-slider").remove();
+        try {
+            map.removeLayer(cases);
+            map.removeLayer(last_cumul);
+        }
+        catch(e) {}
+        show_cumulative("code/data/Lesh_cumul.geojson");
+    }
+    else if ($("select").val() == "9") {
+        $("output.temporal-legend").remove();
+        $("input.range-slider").remove();
+        try {
+            map.removeLayer(cases);
+            map.removeLayer(last_cumul);
+        }
+        catch(e) {}
+        show_cumulative("code/data/Lrti_cumul.geojson");
+    }
+    else if ($("select").val() == "10") {
+        $("output.temporal-legend").remove();
+        $("input.range-slider").remove();
+        try {
+            map.removeLayer(cases);
+            map.removeLayer(last_cumul);
+        }
+        catch(e) {}
+        show_cumulative("code/data/Mg_cumul.geojson");
+    }
+    else if ($("select").val() == "11") {
+        $("output.temporal-legend").remove();
+        $("input.range-slider").remove();
+        try {
+            map.removeLayer(cases);
+            map.removeLayer(last_cumul);
+        }
+        catch(e) {}
+        show_cumulative("code/data/Oth_cumul.geojson");
+    }
+    else if ($("select").val() == "12") {
+        $("output.temporal-legend").remove();
+        $("input.range-slider").remove();
+        try {
+            map.removeLayer(cases);
+            map.removeLayer(last_cumul);
+        }
+        catch(e) {}
+        show_cumulative("code/data/Skin_cumul.geojson");
+    }
+    else if ($("select").val() == "13") {
+        $("output.temporal-legend").remove();
+        $("input.range-slider").remove();
+        try {
+            map.removeLayer(cases);
+            map.removeLayer(last_cumul);
+        }
+        catch(e) {}
+        show_cumulative("code/data/Susp_Dip_cumul.geojson");
+    }
+    else if ($("select").val() == "14") {
+        $("output.temporal-legend").remove();
+        $("input.range-slider").remove();
+        try {
+            map.removeLayer(cases);
+            map.removeLayer(last_cumul);
+        }
+        catch(e) {}
+        show_cumulative("code/data/Susp_Hf_cumul.geojson");
+    }
+    else if ($("select").val() == "15") {
+        $("output.temporal-legend").remove();
+        $("input.range-slider").remove();
+        try {
+            map.removeLayer(cases);
+            map.removeLayer(last_cumul);
+        }
+        catch(e) {}
+        show_cumulative("code/data/Susp_Ms_cumul.geojson");
+    }
+    else if ($("select").val() == "16") {
+        $("output.temporal-legend").remove();
+        $("input.range-slider").remove();
+        try {
+            map.removeLayer(cases);
+            map.removeLayer(last_cumul);
+        }
+        catch(e) {}
+        show_cumulative("code/data/Susp_Nnt_cumul.geojson");
+    }
+    else if ($("select").val() == "17") {
+        $("output.temporal-legend").remove();
+        $("input.range-slider").remove();
+        try {
+            map.removeLayer(cases);
+            map.removeLayer(last_cumul);
+        }
+        catch(e) {}
+        show_cumulative("code/data/Susp_Pert_cumul.geojson");
+    }
+    else if ($("select").val() == "18") {
+        $("output.temporal-legend").remove();
+        $("input.range-slider").remove();
+        try {
+            map.removeLayer(cases);
+            map.removeLayer(last_cumul);
+        }
+        catch(e) {}
+        show_cumulative("code/data/Susp_Rabies_cumul.geojson");
+    }
+    else if ($("select").val() == "19") {
+        $("output.temporal-legend").remove();
+        $("input.range-slider").remove();
+        try {
+            map.removeLayer(cases);
+            map.removeLayer(last_cumul);
+        }
+        catch(e) {}
+        show_cumulative("code/data/Unexp_Fever_cumul.geojson");
+    }
+    // = 20
+    else  {
+        $("output.temporal-legend").remove();
+        $("input.range-slider").remove();
+        try {
+            map.removeLayer(cases);
+            map.removeLayer(last_cumul);
+        }
+        catch(e) {}
+        show_cumulative("code/data/Urti_cumul.geojson");
+    }
+
+} 
+// To go back to the weekly data
+else {
+     $this.text("See cumulative data");
+     if ($("select").val() == "1") {
+        map.removeLayer(last_cumul);
+        updateMenu(cons_all);    
+    }
+    else if ($("select").val() == "2") {
+        map.removeLayer(last_cumul);
+        updateMenu(cons_Acumal);
+    }
+    else if ($("select").val() == "3") {
+        map.removeLayer(last_cumul);
+        updateMenu(cons_Ad);
+    }
+    else if ($("select").val() == "4") {
+        map.removeLayer(last_cumul);
+        updateMenu(cons_Afp);
+    }
+    else if ($("select").val() == "5") {
+        map.removeLayer(last_cumul);
+        updateMenu(cons_Ajs);
+    }
+    else if ($("select").val() == "6") {
+        map.removeLayer(last_cumul);
+        updateMenu(cons_Awd);
+    }
+    else if ($("select").val() == "7") {
+        map.removeLayer(last_cumul);
+        updateMenu(cons_Bd);
+    }
+    else if ($("select").val() == "8") {
+        map.removeLayer(last_cumul);
+        updateMenu(cons_Lesh);
+    }
+    else if ($("select").val() == "9") {
+        map.removeLayer(last_cumul);
+        updateMenu(cons_Lrti);
+    }
+    else if ($("select").val() == "10") {
+        map.removeLayer(last_cumul);
+        updateMenu(cons_Mg);
+    }
+    else if ($("select").val() == "11") {
+        map.removeLayer(last_cumul);
+        updateMenu(cons_Oth);
+    }
+    else if ($("select").val() == "12") {
+        map.removeLayer(last_cumul);
+        updateMenu(cons_Skin);
+    }
+    else if ($("select").val() == "13") {
+        map.removeLayer(last_cumul);
+        updateMenu(cons_Susp_Dip);
+    }
+    else if ($("select").val() == "14") {
+        map.removeLayer(last_cumul);
+        updateMenu(cons_Susp_Hf);
+    }
+    else if ($("select").val() == "15") {
+        map.removeLayer(last_cumul);
+        updateMenu(cons_Susp_Ms);
+    }
+    else if ($("select").val() == "16") {
+        map.removeLayer(last_cumul);
+        updateMenu(cons_Susp_Nnt);
+    }
+    else if ($("select").val() == "17") {
+        map.removeLayer(last_cumul);
+        updateMenu(cons_Susp_Pert);
+    }
+    else if ($("select").val() == "18") {
+        map.removeLayer(last_cumul);
+        updateMenu(cons_Susp_Rabies);
+    }
+    else if ($("select").val() == "19") {
+        map.removeLayer(last_cumul);
+        updateMenu(cons_Unexp_Fever);
+    }
+    // = 20
+    else {
+        map.removeLayer(last_cumul);
+        updateMenu(cons_Urti);
+    }
+};
+});
+return buttonswitchCW;
+       };
+switchCW.addTo(map); 
+});
+
+    </script>
+    <script src="code/src/bootstrap-3.3.4-dist/js/bootstrap.min.js"></script> 
+    <script>  
+    $(function () 
+    { $(".bswitch").tooltip({placement : 'auto', title: 'Switch to OpenStreetMap', container: 'body'});  
+    }); 
+
+    $(function ()  
+    { $(".bzoom").tooltip({placement : 'auto', title: 'Full Extent', container: 'body'});  
+    }); 
+    </script>
+  </body>
 </html>
