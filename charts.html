@@ -47,15 +47,20 @@
                });
 
               // Change the y fomain for the reporting site serie to start at 0 and not at ymin
-              chart.yDomain([0, 64]);
+              chart.yDomain([0, 74]);
 
               // To custom the x-axis label. 
-                chart.xAxis.tickValues([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29])
+              chart.xAxis
+              .axisLabel("Weeks")
+              .tickFormat(function(d){
+                            return d + 1
+                        });
+                /*chart.xAxis.tickValues([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31])
                 .axisLabel("Weeks")
                 .tickFormat(function(d){
                     return d + 1
                 });
-
+*/
               chart.y1Axis
                   .tickFormat(d3.format(',f'));
 
@@ -86,11 +91,16 @@
        });
 
      // To custom the x-axis label. 
-      chart.xAxis.tickValues([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29])
+     chart.xAxis
+        .axisLabel("Weeks")
+        .tickFormat(function(d){
+                      return d + 1
+                  });
+      /*chart.xAxis.tickValues([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31])
                 .axisLabel("Weeks")
                 .tickFormat(function(d){
                     return d + 1
-                });
+                });*/
     chart.yAxis
         .axisLabel("Percentage")
         .tickFormat(d3.format(',.2f'));
@@ -120,11 +130,16 @@
        });
 
      // To custom the x-axis label. 
-      chart.xAxis.tickValues([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29])
+     chart.xAxis
+        .axisLabel("Weeks")
+        .tickFormat(function(d){
+                      return d + 1
+                  });
+      /*chart.xAxis.tickValues([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31])
                 .axisLabel("Weeks")
                 .tickFormat(function(d){
                     return d + 1
-                });;
+                });;*/
 
     chart.yAxis
         .axisLabel("Percentage")
