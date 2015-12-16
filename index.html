@@ -100,7 +100,7 @@
             </div>
         </div>
         <div class="col-md-6">
-            <h3 id="chart_title">Trend of proportion of cases of ARI, Scabies and AD in <select id="trends"><option value="1">All camps</option><option value="2">IDP camps</option><option value="3">Refugee camps</option></select></h3>
+            <h3 id="chart_title">Trend of proportion of cases of Upper/ARI , Lower/ARI, Skin Infestations including scabies and Acute Diarrhea in <select id="trends"><option value="1">All camps</option><option value="2">IDP camps</option><option value="3">Refugee camps</option></select></h3>
                 <div id="chart_gtrend" style="height: 400px; margin: 0 auto;">
                     <svg></svg>
                 </div> 
@@ -392,7 +392,11 @@ function show_cumulative(geojson_file) {
                 });*/
             marker.on('click', function (e) {
                     $("em").css( "display", "none" );
-                    var camp_chart = [{"color": "#2E9AFE", "values": [], "key": "AD"},  {"color": "#FA5858", "values": [], "key": "Skin"},  {"color": "#5FB404", "values": [], "key": "ARI"}]
+                    //var camp_chart = [{"color": "#2E9AFE", "values": [], "key": "AD"},  {"color": "#FA5858", "values": [], "key": "Skin"},  {"color": "#5FB404", "values": [], "key": "ARI"}]
+                    var camp_chart = [{"color": "#2E9AFE", "values": [], "key": "AD"},
+                                      {"color": "#FA5858", "values": [], "key": "Skin"},
+                                      {"color": "#5FB404", "values": [], "key": "LARI"},
+                                      {"color": "#FFBF00", "values": [], "key": "UARI"}]
                      
                         for (var i = cons_Ad.features.length - 1; i >= 0; i--) {
                             if (cons_Ad.features[i].properties.name === this.options.name) {
@@ -401,18 +405,21 @@ function show_cumulative(geojson_file) {
                                         if (cons_all.features[i].properties[attribute][0] != 0) {
                                             camp_chart[0].values.push([attribute, Math.round(cons_Ad.features[i].properties[attribute][0] / cons_all.features[i].properties[attribute][0] * 10000)/100]);
                                             camp_chart[1].values.push([attribute, Math.round(cons_Skin.features[i].properties[attribute][0] / cons_all.features[i].properties[attribute][0] * 10000)/100]);
-                                            camp_chart[2].values.push([attribute,Math.round((cons_Lrti.features[i].properties[attribute][0] + cons_Urti.features[i].properties[attribute][0]) / cons_all.features[i].properties[attribute][0] * 10000)/100]);
+                                            camp_chart[2].values.push([attribute, Math.round(cons_Lrti.features[i].properties[attribute][0] / cons_all.features[i].properties[attribute][0] * 10000)/100]);
+                                            camp_chart[3].values.push([attribute, Math.round(cons_Urti.features[i].properties[attribute][0] / cons_all.features[i].properties[attribute][0] * 10000)/100]);
+                                            /*camp_chart[2].values.push([attribute,Math.round((cons_Lrti.features[i].properties[attribute][0] + cons_Urti.features[i].properties[attribute][0]) / cons_all.features[i].properties[attribute][0] * 10000)/100]);*/
                                         }
                                         else {
                                             camp_chart[0].values.push([attribute, 0]);
                                             camp_chart[1].values.push([attribute, 0]);
                                             camp_chart[2].values.push([attribute, 0]);
+                                            camp_chart[3].values.push([attribute, 0]);
                                         }
                                     }
                                 };
                             };                      
                         };
-                        $( "h2#chart_title").text("Trend of proportion of cases of ARI, Scabies and AD in " + this.options.name);
+                        //$( "h2#chart_title").text("Trend of proportion of cases of LARI, UARI, Scabies and AD in " + this.options.name);
                         nv.addGraph(function() {
                             var chart = nv.models.lineChart()
                                           .x(function(d,i) {return i })
@@ -794,7 +801,7 @@ function show_weekly(geojson_file) {
     $.getJSON(geojson_file, function(data) {
         extractDistrib(data);
         // When I load a layer (disease) I show the last week
-        updatePropSymbols(data, timestamps.length-1);   
+        updatePropSymbols(data, timestamps.length);   
         createSliderUI(data, timestamps); 
         add_legend();
 
