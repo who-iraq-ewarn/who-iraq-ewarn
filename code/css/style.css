@@ -22,6 +22,11 @@ img#who_logo {
     width: 520px;
 }
 
+div#alert_wip {
+    text-align: center;
+    font-weight: bold;
+}
+
 button#tour{
     margin-bottom: 10px;
 }
