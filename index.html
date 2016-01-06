@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="WHO, OMS">
-    <title>EWARN - WHO - IRAQ</title>
+    <title>WHO - IRAQ - EWARN</title>
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -71,10 +71,11 @@
       </div>
     </nav>
     </br>
+    
     <div class="row">
         <div  class="col-md-2"></div>
          <div class="col-md-7">
-             <div class="alert alert-danger" role="alert" id="alert_wip">This is a work in progress version</div>
+             <div class="alert alert-danger" role="alert" id="alert_wip">This is work in progress</div>
          </div>
          <div class="col-md-3"></div>
     </div>
@@ -132,7 +133,7 @@
             </div>
         </div>
         <div class="col-md-6">
-            <h3 id="chart_title">Trend of proportion of cases of Upper/ARI , Lower/ARI, Skin Infestations including scabies and Acute Diarrhea in <select id="trends"><option value="1">All camps</option><option value="2">IDP camps</option><option value="3">Refugee camps</option></select></h3>
+            <h3 id="chart_title">Trend of proportion of cases of Upper & Lower Acute Respiratory Infection (ARI), Skin Infestations including scabies and Acute Diarrhea in <select id="trends"><option value="1">All camps</option><option value="2">IDP camps</option><option value="3">Refugee camps</option></select></h3>
                 <div id="chart_gtrend" style="height: 400px; margin: 0 auto;">
                     <svg></svg>
                 </div> 
@@ -1334,7 +1335,7 @@ function graph_trends(json_file) {
                       });
         chart.yAxis
             .axisLabel("Percentage")
-            .tickFormat(d3.format(',.2f'));
+            .tickFormat(d3.format(',f'));
 
         chart.forceY(0);
 
