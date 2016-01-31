@@ -783,16 +783,13 @@ function show_weekly(geojson_file) {
     try {
         legend.removeFrom(map);
     }
-    catch(err) {  
-    }
+    catch(err) {}
     $.getJSON(geojson_file, function(data) {
         extractDistrib(data);
-        // When I load a layer (disease) I show the last week
-        updatePropSymbols(data, timestamps.length);   
-        //createSliderUI(data, timestamps); 
+        // When I load a layer (disease) I show the current week
+        updatePropSymbols(data, current_week); 
         createSliderUI(data); 
         add_legend();
-
     });
 }
 current_week = timestamps[timestamps.length-1]
