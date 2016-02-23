@@ -144,7 +144,7 @@
  $(document).ready(function() {
      // timestamps will contain the week numbers
      var current_week;
-     var timestamps = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54]; 
+     var timestamps = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57]; 
      var map = L.map('map', { 
             center: [33.3, 43.5], 
             zoom: 6,    
@@ -792,9 +792,13 @@ function createSliderUI(data) {
         donut_chart("code/data/donut_by_ari.json", "weekly", current_week , 'donut1');
         donut_chart("code/data/donut_by_age.json", "weekly", current_week , 'donut2');
         donut_chart("code/data/donut_by_gender.json", "weekly", current_week , 'donut3');
-        
         dis_alert_list(current_week);
-        $("output").text('WEEK ' + current_week.toString() + ' 2015');
+        if (current_week <=53) {
+            $("output").text('WEEK ' + current_week.toString() + ' 2015');
+        } else {
+            $("output").text('WEEK ' + (current_week - 53).toString() + ' 2016');
+        }
+        
      });
     }
     else {
@@ -805,9 +809,12 @@ function createSliderUI(data) {
         donut_chart("code/data/donut_by_ari.json", "weekly", current_week , 'donut1');
         donut_chart("code/data/donut_by_age.json", "weekly", current_week , 'donut2');
         donut_chart("code/data/donut_by_gender.json", "weekly", current_week , 'donut3');
-        
         dis_alert_list(current_week);
-        $("output").text('WEEK ' + current_week.toString() + ' 2015');
+        if (current_week <=53) {
+            $("output").text('WEEK ' + current_week.toString() + ' 2015');
+        } else {
+            $("output").text('WEEK ' + (current_week - 53).toString() + ' 2016');
+        }
      });
     }    
 }
