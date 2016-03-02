@@ -133,7 +133,7 @@
             </div>
         </div>
         <div class="col-md-6">
-            <h3 id="chart_title">Trend of proportion of cases of Upper & Lower Acute Respiratory Infection (ARI), Skin Infestations including scabies and Acute Diarrhea in <select id="trends"><option value="1">All camps</option><option value="2">IDP camps</option><option value="3">Refugee camps</option></select></h3>
+            <h3 id="chart_title">Trend of proportion of cases of Upper & Lower Acute Respiratory Infection (ARI), Skin Infestations including scabies and Acute Diarrhea in <select id="trends"><option value="1">All camps</option><option value="2">IDP camps</option><option value="3">Refugee camps</option><option value="4">Mobile Medical Clinics</option></select></h3>
                 <div id="chart_gtrend" style="height: 400px; margin: 0 auto;">
                     <svg></svg>
                 </div> 
@@ -792,13 +792,13 @@ function createSliderUI(data) {
         donut_chart("code/data/donut_by_ari.json", "weekly", current_week , 'donut1');
         donut_chart("code/data/donut_by_age.json", "weekly", current_week , 'donut2');
         donut_chart("code/data/donut_by_gender.json", "weekly", current_week , 'donut3');
+        
         dis_alert_list(current_week);
         if (current_week <=53) {
             $("output").text('WEEK ' + current_week.toString() + ' 2015');
         } else {
             $("output").text('WEEK ' + (current_week - 53).toString() + ' 2016');
         }
-        
      });
     }
     else {
@@ -809,6 +809,7 @@ function createSliderUI(data) {
         donut_chart("code/data/donut_by_ari.json", "weekly", current_week , 'donut1');
         donut_chart("code/data/donut_by_age.json", "weekly", current_week , 'donut2');
         donut_chart("code/data/donut_by_gender.json", "weekly", current_week , 'donut3');
+        
         dis_alert_list(current_week);
         if (current_week <=53) {
             $("output").text('WEEK ' + current_week.toString() + ' 2015');
@@ -1442,8 +1443,12 @@ $("select#trends").change(
     graph_trends('code/data/chart_idps.json');
   }
   // Just Refugees
-  else{
+  else if ($(this).val() == "3"){
     graph_trends('code/data/chart_refugees.json');
+  }
+  // Just MMC
+  else {
+    graph_trends('code/data/chart_mmc.json');
   }
 });
 
