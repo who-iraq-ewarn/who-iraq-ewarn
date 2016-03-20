@@ -6,7 +6,7 @@ body {
 div.container {
     box-sizing: content-box;
 }
-a.navbar-brand{
+/*a.navbar-brand{
     width:300px;
     padding: 0;
 }
@@ -16,7 +16,7 @@ a.navbar-brand{
 img#who_logo {
     float: right;
 
-}
+}*/
 /*Juste pour dasboard_2*/
 .chart-popup {
     width: 520px;
