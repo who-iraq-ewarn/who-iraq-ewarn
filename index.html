@@ -104,7 +104,7 @@
     <div class="row">
         <div id="text" class="col-md-2">
             <div id="donuts">
-                    <h6>DISTRIBUTION OF ACUTE RESPIRATORY INFECTIONS (ARI)</h6>
+                    <h6>PERCENTAGE OF ACUTE RESPIRATORY INFECTIONS (ARI)</h6>
                     <div class="donut" id="donut1">
                         <svg></svg>
                     </div>
@@ -112,7 +112,7 @@
                     <div class="donut" id="donut2">
                         <svg></svg>
                     </div>
-                    <h6>TOTAL REPORTED CASES BY GENDER</h6>
+                    <h6>PERCENTAGE OF REPORTED CASES BY GENDER</h6>
                     <div class="donut" id="donut3">
                         <svg></svg>
                     </div>
@@ -128,13 +128,13 @@
     </div>
     <div class="row">
         <div class="col-md-6">
-            <h3>Total Consultations and Number of Reporting Sites by Week</h3>
+            <h3>Total consultations and number of reporting sites by EPI week</h3>
             <div id="chart_main" style="height: 400px; margin: 0 auto;">
                 <svg></svg>
             </div>
         </div>
         <div class="col-md-6">
-            <h3 id="chart_title">Trend of proportion of cases of Upper & Lower Acute Respiratory Infection (ARI), Skin Infestations including scabies and Acute Diarrhea in <select id="trends"><option value="1">All camps</option><option value="2">IDP camps</option><option value="3">Refugee camps</option><option value="4">Mobile Medical Clinics</option></select></h3>
+            <h3 id="chart_title">Proportion of cases of upper and lower ARI, skin infestations, including scabies and acute diarrhoea in <select id="trends"><option value="1">All camps</option><option value="2">IDP camps</option><option value="3">Refugee camps</option><option value="4">Mobile Medical Clinics</option></select></h3>
                 <div id="chart_gtrend" style="height: 400px; margin: 0 auto;">
                     <svg></svg>
                 </div> 
@@ -259,7 +259,7 @@
         var baseLayers = L.layerGroup([countries, hdists, hprovs]).addTo(map);
         
         var labelIran= new L.Label();
-        labelIran.setContent("<em>IRAN</em>");
+        labelIran.setContent("<em>ISLAMIC</br>REPUBLIC</br>OF IRAN</em>");
         labelIran.setLatLng([33.8, 48.5]);
         map.showLabel(labelIran);
         
@@ -657,11 +657,11 @@ function add_legend() {
 
             grades = ['rgba(240,59,32, 1)', "rgba(254,153,41, 1);", "rgba(241, 211, 87, 1)"];
             if (uniq_breaks.length == 4) {
-                labels = ['> ' + uniq_breaks[2].toLocaleString(), (uniq_breaks[1] + 1).toLocaleString() + ' - ' + uniq_breaks[2].toLocaleString(),  uniq_breaks[0].toLocaleString() + ' - ' + uniq_breaks[1].toLocaleString()];
+                labels = ['> ' + uniq_breaks[2].toLocaleString(), (uniq_breaks[1] + 1).toLocaleString() + ' – ' + uniq_breaks[2].toLocaleString(),  uniq_breaks[0].toLocaleString() + ' – ' + uniq_breaks[1].toLocaleString()];
             }
             else if (uniq_breaks.length == 3) {
                 //labels = [(uniq_breaks[1] + 1).toLocaleString() + ' - ' + uniq_breaks[2].toLocaleString(),  uniq_breaks[0].toLocaleString() + ' - ' + uniq_breaks[1].toLocaleString()];
-                labels = ['> ' + uniq_breaks[1].toLocaleString(),  uniq_breaks[0].toLocaleString() + ' - ' + uniq_breaks[1].toLocaleString()];
+                labels = ['> ' + uniq_breaks[1].toLocaleString(),  uniq_breaks[0].toLocaleString() + ' – ' + uniq_breaks[1].toLocaleString()];
             }
             else if (uniq_breaks.length == 2) {
                 //labels = [uniq_breaks[0].toLocaleString() + ' - ' + uniq_breaks[1].toLocaleString()];
@@ -914,7 +914,7 @@ switchOsm.addTo(map);
 var dropdmenu = L.control({position: 'topright'});
 dropdmenu.onAdd = function (map) {
     var div = L.DomUtil.create('div', 'info dropdmenu');
-    div.innerHTML = '<select class="form-control choice_disease"><option value="1">All Diseases</option><optgroup label="Respiratory Diseases"><option value="2">Upper Acute Respiratory Infection</option><option value="3">Lower Acute Respiratory Infection</option></optgroup><optgroup label="Water Borne Diseases"><option value="4">Acute Diarrhea</option><option value="5">Bloody Diarrhea</option><option value="6">Acute Watery Diarrhea</option><option value="7">Acute Jaundice Syndrome</option></optgroup><optgroup label="Vaccine Preventable Diseases"><option value="8">Acute Flaccid Paralysis</option><option value="9">Suspected Measles</option><option value="10">Suspected Meningitis</option><option value="11">Suspected Diphtheria</option><option value="12">Suspected Pertusis</option><option value="13">Suspected Neonatal Tetanus</option></optgroup><optgroup label="Other Communicable Diseases"><option value="14">Unexplained Fever</option><option value="15">Suspected Leishmaniasis</option><option value="16">Suspected Hemorrhagic Fever</option><option value="17">Skin Diseases</option><option value="18">Suspected Rabies</option><option value="19">Malnutrition</option></optgroup><option value="20">Others</option></select>';
+    div.innerHTML = '<select class="form-control choice_disease"><option value="1">All diseases</option><optgroup label="respiratory diseases"><option value="2">upper acute respiratory infection</option><option value="3">lower acute respiratory infection</option></optgroup><optgroup label="water borne diseases"><option value="4">acute diarrhoea</option><option value="5">bloody diarrhoea</option><option value="6">acute watery diarrhoea</option><option value="7">acute jaundice syndrome</option></optgroup><optgroup label="vaccine preventable diseases"><option value="8">acute flaccid paralysis</option><option value="9">suspected measles</option><option value="10">suspected meningitis</option><option value="11">suspected diphtheria</option><option value="12">suspected pertussis</option><option value="13">suspected neonatal tetanus</option></optgroup><optgroup label="other communicable diseases"><option value="14">unexplained fever</option><option value="15">suspected leishmaniasis</option><option value="16">suspected hemorrhagic fever</option><option value="17">skin diseases</option><option value="18">suspected rabies</option><option value="19">malnutrition</option></optgroup><option value="20">others</option></select>';
     div.firstChild.onmousedown = div.firstChild.ondblclick = L.DomEvent.stopPropagation;
     return div;
 };
@@ -1454,28 +1454,28 @@ $("select#trends").change(
 });
 
 $('input.range-slider').attr('data-step', '1');
-$('input.range-slider').attr('data-intro', "The timeline allows you to consult the data of particular week.<br />Moving the cursor will update the data on the map and also the pie charts on left side and the lists on the right side.");
+$('input.range-slider').attr('data-intro', "The timeline allows you to access the data of a particular week.<br />Moving the cursor will update the data on the map and also the pie charts on the left-hand side and the lists on the right-hand side.");
 
 $('output.temporal-legend').attr('data-step', '2');
-$('output.temporal-legend').attr('data-intro', 'By moving the cursor of the timeline, the week number gets updated here.');
+$('output.temporal-legend').attr('data-intro', 'This gives you the EPI week.');
 
 $('button.bswitchCW').attr('data-step', '3');
-$('button.bswitchCW').attr('data-intro', 'Click on this button to consult the cumulative data.<br />To go back to the weekly data, click again.');
+$('button.bswitchCW').attr('data-intro', 'Click on this button to access cumulative data.<br />To return to a particular EPI week, click again.');
 
 $('select.choice_disease').attr('data-step', '4');
-$('select.choice_disease').attr('data-intro', 'With this dropdown menu you can select a particular disease. By doing so, the data on the map will be update. By default, all the diseases are displayed');
+$('select.choice_disease').attr('data-intro', 'With this dropdown menu you can select a particular disease.<br />By doing so, the data on the map will be updated.<br />By default, all diseases are displayed.');
 
 $("button.bswitch").attr('data-step', '5');
-$("button.bswitch").attr('data-intro', 'Switch to OpenStreetMap');
+$("button.bswitch").attr('data-intro', 'Switch to OpenStreetMap.');
 
 $("button.btlegend").attr('data-step', '6');
-$("button.btlegend").attr('data-intro', 'Show or hide the legend');
+$("button.btlegend").attr('data-intro', 'Show or hide the legend.');
 
 $("button.bzoom").attr('data-step', '7');
-$("button.bzoom").attr('data-intro', 'Full Extent');
+$("button.bzoom").attr('data-intro', 'Full Extent.');
 
 $("select#trends").attr('data-step', '8');
-$("select#trends").attr('data-intro', "You can select a particular variable. It will update the chart below");
+$("select#trends").attr('data-intro', "You can select a particular variable. It will update the chart below.");
 });
 </script> 
 
@@ -1483,15 +1483,15 @@ $("select#trends").attr('data-intro', "You can select a particular variable. It 
   
 <script>  
     $(function () 
-    { $(".btlegend").tooltip({placement : 'bottom', title: 'Show / Hide Legend', container: 'body'});  
+    { $(".btlegend").tooltip({placement : 'bottom', title: 'Show / hide legend', container: 'body'});  
     }); 
 
     $(function ()  
-    { $(".bzoom").tooltip({placement : 'auto', title: 'Full Extent', container: 'body'});  
+    { $(".bzoom").tooltip({placement : 'auto', title: 'Full extent', container: 'body'});  
     }); 
 
     $(function ()  
-    { $(".bswitch").tooltip({placement : 'auto', title: 'Show / Hide  OpenStreetMap background', container: 'body'});  
+    { $(".bswitch").tooltip({placement : 'auto', title: 'Show / hide  OpenStreetMap background', container: 'body'});  
     }); 
 </script>
 
