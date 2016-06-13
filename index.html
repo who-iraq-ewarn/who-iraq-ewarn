@@ -112,7 +112,7 @@
                     <div class="donut" id="donut2">
                         <svg></svg>
                     </div>
-                    <h6>PERCENTAGE OF REPORTED CASES BY GENDER</h6>
+                    <h6>TOTAL REPORTED CASES BY SEX</h6>
                     <div class="donut" id="donut3">
                         <svg></svg>
                     </div>
@@ -264,7 +264,7 @@
         map.showLabel(labelIran);
         
         var labelSyriq = new L.Label();
-        labelSyriq.setContent("<em>SYRIA</em>");
+        labelSyriq.setContent("<em>SYRIAN ARAB</br>REPUBLIC</em>");
         labelSyriq.setLatLng([35, 38]);
         map.showLabel(labelSyriq);
 
@@ -623,13 +623,25 @@ function updatePropSymbols(data, timestamp) {
                 else {
                     myIcon = icon_large;
                 }
-                var weekly_popup = "<b>" + data.features[i].properties.name + " </b><br>" +
+                
+                if (timestamp <= 53) {
+                    var weekly_popup = "<b>" + data.features[i].properties.name + " </b><br>" +
                    "<b>" + String(data.features[i].properties[timestamp][0]) +
                    "</b> consultations in week " + timestamp + " 2015<br>" +
                    "<b>Reporting Place</b>: " + String(data.features[i].properties[timestamp][1]) +
                    "<br><b>Partner</b>: " + String(data.features[i].properties[timestamp][2]).toUpperCase() +
                    "<br><b>Type</b>: " + String(data.features[i].properties[timestamp][3]) +
                    "<br><b>Type Facility</b>: " + String(data.features[i].properties[timestamp][4]).toUpperCase();
+                }
+                else {
+                    var weekly_popup = "<b>" + data.features[i].properties.name + " </b><br>" +
+                   "<b>" + String(data.features[i].properties[timestamp][0]) +
+                   "</b> consultations in week " + String(timestamp - 53) + " 2016<br>" +
+                   "<b>Reporting Place</b>: " + String(data.features[i].properties[timestamp][1]) +
+                   "<br><b>Partner</b>: " + String(data.features[i].properties[timestamp][2]).toUpperCase() +
+                   "<br><b>Type</b>: " + String(data.features[i].properties[timestamp][3]) +
+                   "<br><b>Type Facility</b>: " + String(data.features[i].properties[timestamp][4]).toUpperCase();
+                }
 
                 var marker = L.marker(new L.LatLng(coords[1], coords[0]), { icon: myIcon, val: data.features[i].properties[timestamp][0] });
                 marker.bindPopup(weekly_popup, {'offset': L.point(0,-10)});
@@ -1454,7 +1466,7 @@ $("select#trends").change(
 });
 
 $('input.range-slider').attr('data-step', '1');
-$('input.range-slider').attr('data-intro', "The timeline allows you to access the data of a particular week.<br />Moving the cursor will update the data on the map and also the pie charts on the left-hand side and the lists on the right-hand side.");
+$('input.range-slider').attr('data-intro', "The timeline allows you to access the data of a particular week.<br />Moving the cursor will update the data on the map and also the pie charts on the left-hand side and the lists on the right-hand side");
 
 $('output.temporal-legend').attr('data-step', '2');
 $('output.temporal-legend').attr('data-intro', 'This gives you the EPI week.');
