@@ -1,4 +1,4 @@
-***This website has been relocated to: http://irq-data.emro.who.int/ewarn***
+***This website has been relocated to: http://irq-data.emro.who.int/***
 
 # who-iraq-ewarn.github.io
 
